@@ -14,4 +14,4 @@ npm start
 note:
 
 1. make sure you have node and express pre installed
-2. also do change io.connect('') to you own IP 
+2. also do change io.connect('') to your own IP 
