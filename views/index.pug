@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1= title
+  
+  h1 Hello World!
+  #future
+  form#form
+    div.ol(data-bind='foreach: chatList')
+      li.span(data-bind='text: $data')
+    input(data-bind='value: chatBody')
+    button(data-bind='click: submit') submit
+  
+
+block PostScripts
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js')
+  script(src='/javascripts/index.js')
