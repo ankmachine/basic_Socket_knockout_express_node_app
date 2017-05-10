@@ -18,18 +18,23 @@ function AppViewModel() {
     this.lastName = ko.observable("Bertington");
     this.chatList = ko.observableArray([]);
     this.chatBody = ko.observable('');
+    this.username = '';
 
-    this.fullName = ko.computed(function () {
-        return this.firstName() + " " + this.lastName();
-    }, this);
-
-    this.capitalizeLastName = function () {
-        var currentVal = this.lastName();        // Read the current value
-        this.lastName(currentVal.toUpperCase()); // Write back a modified value
+    this.enterChat = function () {
+        var bodyData = { "username": this.username };
+        // console.log(bodyData);
+        $.ajax({
+            url: "http://localhost:4200/callsign",
+            mimeType: "application/json",
+            dataType: "json",
+            type: "POST",
+            data: bodyData
+        })
     };
 
-    this.addBroadChat = function(data){
-        this.chatList.push(data);
+    this.addBroadChat = function (data) {
+        var chatData = data.user+": "+data.msg;
+        this.chatList.push(chatData);
     }
 
     this.submit = function () {
@@ -37,7 +42,7 @@ function AppViewModel() {
         // alert(this.chatBody());
         this.chatList.push(this.chatBody());
         var message = this.chatBody();
-        socket.emit('messages', message);      // Read the current value
+        socket.emit('messages', {"msg":message, "user":this.username});      // Read the current value
         this.chatBody('');
     };
 }
@@ -47,6 +52,6 @@ var appModel = new AppViewModel();
 ko.applyBindings(appModel);
 
 socket.on('broad', function (data) {
-        // alert(data);
-        appModel.addBroadChat(data);
-    });
+    // alert(data);
+    appModel.addBroadChat(data);
+});

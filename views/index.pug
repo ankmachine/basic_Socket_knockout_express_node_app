@@ -4,6 +4,12 @@ block content
   h1= title
   
   h1 Hello World!
+
+  form
+    span username
+    input(data-bind='value: username')
+    button(data-bind='click: enterChat') enter
+
   #future
   form#form
     div.ol(data-bind='foreach: chatList')

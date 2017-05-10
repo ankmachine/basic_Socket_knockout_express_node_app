@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var userList = [];
 // var server = require('./bin/www').server;
 
 var app = express();
@@ -15,6 +16,7 @@ var io = require('socket.io')(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -27,12 +29,34 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/users', users);
 
+app.post('/callsign', function(req, res){
+
+    var username = req.body.username;
+    userList.push(username);
+    console.log(userList);
+    data = {"data":"ok"};
+    res.status(200).json(data);
+    
+});
+
+app.get('/test', function(req, res){
+  res.send("erere")
+  // res.send(200).json({"tst": "success"})
+})
+
+
+
+
+
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
+
+
 
 // error handlers
 
@@ -61,15 +85,17 @@ var noOfUsers = 0;
 io.on('connection', function (client) {
   console.log('Client connected...');
   noOfUsers++;
+  console.log(client);
   client.on('join', function (data) {
     console.log(data);
-    client.broadcast.emit('broad', "user is connected");
+    // client.broadcast.emit('broad', "user is connected");
   });
 
   client.on('disconnect', function(){
     noOfUsers--;
+    
     console.log("A user has disconnected");
-    client.broadcast.emit('broad', "user is DC");
+
   });
 
   client.on('messages', function (data) {
