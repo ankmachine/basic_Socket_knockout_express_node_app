@@ -12,7 +12,8 @@ var userList = [];
 
 var app = express();
 var server = app.listen(4200);
-var io = require('socket.io')(server);
+var socketio = require('./socketConnection');
+// var io = require('socket.io')(server);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -81,30 +82,33 @@ app.use(function (err, req, res, next) {
     error: {}
   });
 });
-var noOfUsers = 0;
-io.on('connection', function (client) {
-  console.log('Client connected...');
-  noOfUsers++;
-  console.log(client);
-  client.on('join', function (data) {
-    console.log(data);
-    // client.broadcast.emit('broad', "user is connected");
-  });
 
-  client.on('disconnect', function(){
-    noOfUsers--;
-    
-    console.log("A user has disconnected");
+socketio(server);
 
-  });
+// var noOfUsers = 0;
+// io.on('connection', function (client) {
+//   console.log('Client connected...');
+//   noOfUsers++;
+//   console.log(client.id);
+//   client.on('join', function (data) {
+//     console.log(data);
+//     // client.broadcast.emit('broad', "user is connected");
+//   });
 
-  client.on('messages', function (data) {
-    // client.emit('broad', data);
-    client.broadcast.emit('broad', data);
-    console.log(data);
-  });
+//   client.on('disconnect', function(){
+//     noOfUsers--;
+//     console.log(client.id)
+//     console.log("A user has disconnected");
 
-});
+//   });
+
+//   client.on('messages', function (data) {
+//     // client.emit('broad', data);
+//     client.broadcast.emit('broad', data);
+//     console.log(data);
+//   });
+
+// });
 
 
 module.exports = app;
