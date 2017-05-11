@@ -10,8 +10,11 @@ block content
     input(data-bind='value: username')
     button(data-bind='click: enterChat') enter
 
+   
+
   #future
-  form#form
+  form
+    select(data-bind='options: roomList, value: selectedRoom' )
     div.ol(data-bind='foreach: chatList')
       li.span(data-bind='text: $data')
     input(data-bind='value: chatBody')
@@ -22,4 +25,5 @@ block PostScripts
   script(src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js')
+  //- script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap-grid.css');
   script(src='/javascripts/index.js')
