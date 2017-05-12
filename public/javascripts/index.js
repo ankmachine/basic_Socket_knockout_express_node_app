@@ -9,25 +9,19 @@ socket.on('connect', function (data) {
     
 });
 
-// socket.on('broad', function (data) {
-//     $('#future').append(data + "<br/>");
-// });
-// $('form').submit(function (e) {
-//     e.preventDefault();
-//     var message = $('#chat_input').val();
-//     socket.emit('messages', message);
-// });
 
 
 function AppViewModel() {
     this.firstName = ko.observable("Bert");
     this.lastName = ko.observable("Bertington");
+    this.notificationList = ko.observableArray([]);
     this.chatList = ko.observableArray([]);
     this.chatBody = ko.observable('');
     this.username = ko.observable('');
     this.usernameSet = ko.observable(false);
     this.roomList = ko.observableArray(["bunny", "cat", "horse", "lion", "peacock"])
     this.selectedRoom = ko.observable('');
+    this.subscribedRoomList = this.roomList = ko.observableArray(["bunny", "cat", "horse", "lion"])
 
     this.enterChat = function () {
         var bodyData = { "username": this.username };
@@ -42,8 +36,12 @@ function AppViewModel() {
     };
 
     this.addBroadChat = function (data) {
-        var chatData = data.user+": "+data.msg;
-        this.chatList.push(chatData);
+        var notificationData = data.user+" sent "+data.msg+" in room "+data.roomId;
+        this.notificationList.push(notificationData);
+        if(this.selectedRoom()==data.roomId){
+            var chatData = data.user+": "+data.msg;
+            this.chatList.push(chatData);
+        }
     }
 
     this.submit = function () {

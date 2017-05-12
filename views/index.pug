@@ -3,22 +3,31 @@ extends layout
 block content
   h1= title
   
-  h1 Hello World!
-
+  
   form
     span username
     input(data-bind='value: username')
     button(data-bind='click: enterChat') enter
-
-   
-
-  #future
-  form
-    select(data-bind='options: roomList, value: selectedRoom' )
-    div.ol(data-bind='foreach: chatList')
-      li.span(data-bind='text: $data')
-    input(data-bind='value: chatBody')
-    button(data-bind='click: submit') submit
+  
+  .col-md-6
+    #future
+    form
+      select(data-bind='options: roomList, value: selectedRoom' )
+      div.ol(data-bind='foreach: chatList')
+        li.span(data-bind='text: $data')
+      input(data-bind='value: chatBody')
+      button(data-bind='click: submit') submit
+  .col-md-3
+    h3 notification
+    div.ol(data-bind="foreach: subscribedRoomList")
+      ul
+        span(data-bind='text: $data')
+        span.badge 5
+  .col-md-3
+    h3 Live
+    div.ol(data-bind='foreach: notificationList')
+        li.span(data-bind='text: $data')
+        
   
 
 block PostScripts
