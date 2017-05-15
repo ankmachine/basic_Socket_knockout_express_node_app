@@ -21,11 +21,11 @@ function AppViewModel() {
     this.usernameSet = ko.observable(false);
     this.roomList = ko.observableArray(["bunny", "cat", "horse", "lion", "peacock"])
     this.selectedRoom = ko.observable('');
-    this.subscribedRoomList = this.roomList = ko.observableArray(["bunny", "cat", "horse", "lion"])
+    this.subscribedRoomList = ko.observableArray(["bunny", "cat", "horse", "lion"])
 
     this.enterChat = function () {
         var bodyData = { "username": this.username };
-        // console.log(bodyData);
+
         $.ajax({
             url: "http://localhost:4200/callsign",
             mimeType: "application/json",
@@ -46,8 +46,6 @@ function AppViewModel() {
 
     this.submit = function () {
 
-        // alert(this.chatBody());
-        // alert(this.selectedRoom());
         this.chatList.push(this.chatBody());
         var message = this.chatBody();
         socket.emit('messages', {"msg":message, "user":this.username(), "roomId":this.selectedRoom()});      // Read the current value
