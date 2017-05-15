@@ -3,10 +3,10 @@ socket.on('connect', function (data) {
     socket.emit('join', 'Hello World from client');
     var roomlist = ["bunny", "cat", "horse", "lion"];
     // alert(roomlist);
-    for(room of roomlist){
+    for (room of roomlist) {
         socket.emit('subscribe', room);
     }
-    
+
 });
 
 
@@ -22,6 +22,7 @@ function AppViewModel() {
     this.roomList = ko.observableArray(["bunny", "cat", "horse", "lion", "peacock"])
     this.selectedRoom = ko.observable('');
     this.subscribedRoomList = ko.observableArray(["bunny", "cat", "horse", "lion"])
+    this.eventCounter = ko.observableArray([]);
 
     this.enterChat = function () {
         var bodyData = { "username": this.username };
@@ -36,11 +37,34 @@ function AppViewModel() {
     };
 
     this.addBroadChat = function (data) {
-        var notificationData = data.user+" sent "+data.msg+" in room "+data.roomId;
+        var notificationData = data.user + " sent " + data.msg + " in room " + data.roomId;
         this.notificationList.push(notificationData);
-        if(this.selectedRoom()==data.roomId){
-            var chatData = data.user+": "+data.msg;
+        var roomId = data.roomId;
+        if (this.selectedRoom() == data.roomId) {
+            var chatData = data.user + ": " + data.msg;
             this.chatList.push(chatData);
+        }
+        else {
+           
+            var eventObject = {
+                "name": roomId,
+                "number": 1
+            };
+            for (i of this.eventCounter()){
+                var foundRoom = false;
+               
+                if (i.name() == data.roomId){
+                    console.log(i.number());
+                    var newNumber = i.number()+1;
+                    i.number(newNumber);
+                    foundRoom = true;
+                   
+                }
+            }
+            if(!foundRoom){
+                this.eventCounter.push(ko.mapping.fromJS(eventObject));
+            }
+            
         }
     }
 
@@ -48,7 +72,7 @@ function AppViewModel() {
 
         this.chatList.push(this.chatBody());
         var message = this.chatBody();
-        socket.emit('messages', {"msg":message, "user":this.username(), "roomId":this.selectedRoom()});      // Read the current value
+        socket.emit('messages', { "msg": message, "user": this.username(), "roomId": this.selectedRoom() });      // Read the current value
         this.chatBody('');
     };
 }

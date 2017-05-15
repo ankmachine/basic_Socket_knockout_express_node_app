@@ -19,10 +19,10 @@ block content
       button(data-bind='click: submit') submit
   .col-md-3
     h3 notification
-    div.ol(data-bind="foreach: subscribedRoomList")
+    div.ol(data-bind="foreach: eventCounter")
       ul
-        span(data-bind='text: $data')
-        span.badge 5
+        span(data-bind='text: name')
+        span.badge(data-bind='text: number')
   .col-md-3
     h3 Live
     div.ol(data-bind='foreach: notificationList')
@@ -32,6 +32,7 @@ block content
 
 block PostScripts
   script(src='https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js')
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/knockout.mapping/2.4.1/knockout.mapping.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js')
   script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js')
   //- script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap-grid.css');
